@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register</title>
+</head>
+<body>
+
+  <h2>Student Registration Form</h2>
+
+  <form id="registerForm" action="#" method="post" novalidate>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Enter your name">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="example@abc.com">
+
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" name="phone" placeholder="10-digit number">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter password">
+
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password">
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p id="message" aria-live="polite"></p>
+
+  <button type="button" id="saveCookieButton">Save Username in Cookie</button>
+
+  <hr>
+
+  <h2>DOM Manipulation</h2>
+
+  <p id="domText">This is original text on the page.</p>
+
+  <img id="demoImg" src="https://via.placeholder.com/200x120?text=Image1" alt="demo image" width="200">
+
+  <div>
+    <button type="button" id="btnChangeText">Change Text</button>
+    <button type="button" id="btnChangeImage">Change Image</button>
+    <button type="button" id="btnAddNode">Add Node</button>
+    <button type="button" id="btnRemoveNode">Remove Node</button>
+  </div>
+
+</body>
+</html>
