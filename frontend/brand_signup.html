@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Signup | BrandScape</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(140, 82, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(179, 136, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #faf8ff 0%, #f0e8ff 100%);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #333;
+    }
+    
+    .signup-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 50px;
+      border-radius: 25px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    }
+    
+    .signup-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+    
+    .signup-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #8c52ff, #b388ff);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 35px;
+      color: white;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(140, 82, 255, 0.3);
+    }
+    
+    .signup-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .signup-subtitle {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 0.95rem;
+    }
+    
+    .form-control, .form-select {
+      border-radius: 12px;
+      border: 2px solid #e8e8e8;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: #8c52ff;
+      box-shadow: 0 0 0 0.2rem rgba(140, 82, 255, 0.1);
+    }
+    
+    .form-control.is-valid {
+      border-color: #28a745;
+    }
+    
+    .form-control.is-invalid {
+      border-color: #dc3545;
+    }
+    
+    .btn-custom {
+      background: linear-gradient(135deg, #8c52ff, #7a45e6);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(140, 82, 255, 0.3);
+      margin-top: 10px;
+    }
+    
+    .btn-custom:hover:not(:disabled) {
+      background: linear-gradient(135deg, #7a45e6, #6838cc);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(140, 82, 255, 0.4);
+    }
+    
+    .btn-custom:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .login-link a {
+      color: #8c52ff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .login-link a:hover {
+      color: #7a45e6;
+      text-decoration: underline;
+    }
+    
+    .alert {
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-header">
+      <div class="signup-icon">
+        <i class="fa-solid fa-building"></i>
+      </div>
+      <h3 class="signup-title">Create Brand Account</h3>
+      <p class="signup-subtitle">Join BrandScape and connect with influencers</p>
+    </div>
+
+    <div id="alert-container"></div>
+
+    <form id="signupForm">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="username" class="form-label">Brand Username *</label>
+            <input type="text" class="form-control" id="username" required>
+            <small class="text-muted">Must be registered in our system</small>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name" class="form-label">Brand Name *</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address *</label>
+        <input type="email" class="form-control" id="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="category" class="form-label">Industry Category *</label>
+        <select class="form-select" id="category" required>
+          <option value="">Select a category</option>
+          <option value="Fashion">Fashion & Apparel</option>
+          <option value="Beauty">Beauty & Cosmetics</option>
+          <option value="Technology">Technology & Electronics</option>
+          <option value="Food">Food & Beverage</option>
+          <option value="Travel">Travel & Tourism</option>
+          <option value="Fitness">Fitness & Wellness</option>
+          <option value="Home">Home & Living</option>
+          <option value="Entertainment">Entertainment & Media</option>
+          <option value="Automotive">Automotive</option>
+          <option value="Finance">Finance & Banking</option>
+          <option value="Education">Education & E-learning</option>
+          <option value="Healthcare">Healthcare & Medical</option>
+          <option value="Sports">Sports & Athletics</option>
+          <option value="Gaming">Gaming & Esports</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="bio" class="form-label">Brand Description</label>
+        <textarea class="form-control" id="bio" rows="3" placeholder="Tell us about your brand..."></textarea>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="password" class="form-label">Password *</label>
+            <input type="password" class="form-control" id="password" required minlength="8">
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm Password *</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-custom" id="signupBtn">
+        <span id="signupText"><i class="fa-solid fa-user-plus me-2"></i>Create Account</span>
+        <span id="signupSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+      </button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="brand_login.html">Sign In</a>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:5000/api';
+    
+    function showAlert(message, type = 'danger') {
+      const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      `;
+      document.getElementById('alert-container').innerHTML = alertHTML;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Email validation
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+    
+    // Password validation
+    function validatePassword(password) {
+      const minLength = password.length >= 8;
+      const hasUppercase = /[A-Z]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+      
+      return {
+        valid: minLength && hasUppercase && hasSpecialChar,
+        minLength,
+        hasUppercase,
+        hasSpecialChar
+      };
+    }
+    
+    // Real-time password validation feedback
+    document.getElementById('password').addEventListener('input', function(e) {
+      const password = e.target.value;
+      const validation = validatePassword(password);
+      
+      let feedback = document.getElementById('password-feedback');
+      if (!feedback) {
+        feedback = document.createElement('small');
+        feedback.id = 'password-feedback';
+        feedback.className = 'text-muted d-block mt-1';
+        e.target.parentElement.appendChild(feedback);
+      }
+      
+      let messages = [];
+      messages.push(validation.minLength ? '✅ At least 8 characters' : '❌ At least 8 characters');
+      messages.push(validation.hasUppercase ? '✅ One uppercase letter' : '❌ One uppercase letter');
+      messages.push(validation.hasSpecialChar ? '✅ One special character' : '❌ One special character (!@#$%^&*)');
+      
+      feedback.innerHTML = messages.join('<br>');
+      
+      if (validation.valid) {
+        e.target.classList.remove('is-invalid');
+        e.target.classList.add('is-valid');
+      } else {
+        e.target.classList.remove('is-valid');
+        e.target.classList.add('is-invalid');
+      }
+    });
+    
+    // Real-time email validation
+    document.getElementById('email').addEventListener('blur', function(e) {
+      const email = e.target.value;
+      if (email && !validateEmail(email)) {
+        e.target.classList.add('is-invalid');
+      } else {
+        e.target.classList.remove('is-invalid');
+        e.target.classList.add('is-valid');
+      }
+    });
+    
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate email
+      if (!validateEmail(email)) {
+        showAlert('Please enter a valid email address.');
+        return;
+      }
+      
+      // Validate password
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.valid) {
+        let errorMsg = 'Password must contain:<br>';
+        if (!passwordValidation.minLength) errorMsg += '• At least 8 characters<br>';
+        if (!passwordValidation.hasUppercase) errorMsg += '• At least one uppercase letter<br>';
+        if (!passwordValidation.hasSpecialChar) errorMsg += '• At least one special character (!@#$%^&*)<br>';
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+        alertDiv.innerHTML = errorMsg + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+        document.getElementById('alert-container').innerHTML = '';
+        document.getElementById('alert-container').appendChild(alertDiv);
+        return;
+      }
+      
+      // Check password match
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match!');
+        return;
+      }
+      
+      const signupBtn = document.getElementById('signupBtn');
+      const signupText = document.getElementById('signupText');
+      const signupSpinner = document.getElementById('signupSpinner');
+      
+      // Show loading state
+      signupBtn.disabled = true;
+      signupText.classList.add('d-none');
+      signupSpinner.classList.remove('d-none');
+      
+      try {
+        const response = await fetch(`${API_URL}/auth/brand/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            name: document.getElementById('name').value,
+            email: email,
+            category: document.getElementById('category').value,
+            bio: document.getElementById('bio').value,
+            password: password
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('userData', JSON.stringify(data.user));
+          
+          showAlert('Account created successfully! Redirecting to dashboard...', 'success');
+          
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } else {
+          showAlert(data.message || 'Signup failed. Please try again.');
+        }
+      } catch (error) {
+        showAlert('Network error. Please check your connection and make sure the server is running.');
+        console.error('Signup error:', error);
+      } finally {
+        signupBtn.disabled = false;
+        signupText.classList.remove('d-none');
+        signupSpinner.classList.add('d-none');
+      }
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

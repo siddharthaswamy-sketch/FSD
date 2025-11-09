@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Campaign | BrandScape</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #f8f9ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #eee;
+            padding-top: 1rem;
+            position: fixed;
+            width: 250px;
+        }
+        
+        .sidebar .brand-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .brand-logo h4 {
+            color: #6a42f5;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            margin: 4px 10px;
+            color: #444;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a.active,
+        .sidebar a:hover {
+            background: #f0ebff;
+            color: #6a42f5;
+        }
+        
+        .sidebar a i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .campaign-form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #6a42f5;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0ebff;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #6a42f5;
+            box-shadow: 0 0 0 0.2rem rgba(106, 66, 245, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            flex: 0 0 calc(33.333% - 10px);
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .checkbox-item label {
+            font-weight: 400;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .btn-create-campaign {
+            background: linear-gradient(135deg, #8c52ff, #7a45e6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(140, 82, 255, 0.3);
+        }
+        
+        .btn-create-campaign:hover:not(:disabled) {
+            background: linear-gradient(135deg, #7a45e6, #6838cc);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(140, 82, 255, 0.4);
+        }
+        
+        .btn-create-campaign:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="brand-logo">
+            <i class="fa-solid fa-link" style="font-size: 30px; color: #6a42f5;"></i>
+            <h4>BrandScape</h4>
+        </div>
+        <a href="index.html">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+        <a href="create_campaign.html" class="active">
+            <i class="fa-solid fa-bullhorn"></i> Start Campaign
+        </a>
+        <a href="my_campaigns.html">
+            <i class="fa-solid fa-list"></i> My Campaigns
+        </a>
+        <a href="profile.html">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h3><i class="fa-solid fa-bullhorn me-2" style="color: #6a42f5;"></i>Create New Campaign</h3>
+            <p class="text-muted mb-0">Fill in the details to find the perfect influencers for your brand</p>
+        </div>
+
+        <div class="campaign-form-container">
+            <div id="alert-container"></div>
+
+            <form id="campaignForm">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fa-solid fa-circle-info me-2"></i>Campaign Information
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="campaignName" class="form-label">Campaign Name *</label>
+                            <input type="text" class="form-control" id="campaignName" placeholder="e.g., Summer Collection Launch 2025" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Category *</label>
+                            <select class="form-select" id="category" required>
+                                <option value="">Select category</option>
+                                <option value="Fashion">Fashion & Apparel</option>
+                                <option value="Beauty">Beauty & Cosmetics</option>
+                                <option value="Technology">Technology & Electronics</option>
+                                <option value="Food">Food & Beverage</option>
+                                <option value="Travel">Travel & Tourism</option>
+                                <option value="Fitness">Fitness & Wellness</option>
+                                <option value="Home">Home & Living</option>
+                                <option value="Entertainment">Entertainment & Media</option>
+                                <option value="Automotive">Automotive</option>
+                                <option value="Finance">Finance & Banking</option>
+                                <option value="Education">Education & E-learning</option>
+                                <option value="Healthcare">Healthcare & Medical</option>
+                                <option value="Sports">Sports & Athletics</option>
+                                <option value="Gaming">Gaming & Esports</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Campaign Description *</label>
+                        <textarea class="form-control" id="description" rows="4" placeholder="Describe your campaign goals, product details, and what you're looking for in an influencer..." required></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="budget" class="form-label">Budget (USD)</label>
+                            <input type="number" class="form-control" id="budget" placeholder="e.g., 50000" min="0">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="duration" class="form-label">Campaign Duration</label>
+                            <select class="form-select" id="duration">
+                                <option value="1-month">1 Month</option>
+                                <option value="3-months">3 Months</option>
+                                <option value="6-months">6 Months</option>
+                                <option value="12-months">12 Months</option>
+                                <option value="ongoing">Ongoing</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target Audience -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fa-solid fa-users me-2"></i>Target Audience
+                    </h4>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Age Groups</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age1" value="13-17">
+                                <label for="age1">13-17 (Gen Z)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age2" value="18-24" checked>
+                                <label for="age2">18-24 (Gen Z)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age3" value="25-34" checked>
+                                <label for="age3">25-34 (Millennials)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age4" value="35-44">
+                                <label for="age4">35-44 (Millennials)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age5" value="45-54">
+                                <label for="age5">45-54 (Gen X)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="age6" value="55+">
+                                <label for="age6">55+ (Boomers)</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Target Locations</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc1" value="US" checked>
+                                <label for="loc1">United States</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc2" value="UK">
+                                <label for="loc2">United Kingdom</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc3" value="Canada">
+                                <label for="loc3">Canada</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc4" value="India" checked>
+                                <label for="loc4">India</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc5" value="Australia">
+                                <label for="loc5">Australia</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc6" value="Germany">
+                                <label for="loc6">Germany</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc7" value="France">
+                                <label for="loc7">France</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc8" value="Brazil">
+                                <label for="loc8">Brazil</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="loc9" value="Global">
+                                <label for="loc9">Global</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" name="gender" id="genderAll" value="All" checked>
+                                <label for="genderAll">All</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="gender" id="genderMale" value="Male">
+                                <label for="genderMale">Male</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="gender" id="genderFemale" value="Female">
+                                <label for="genderFemale">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Requirements -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <i class="fa-solid fa-clipboard-check me-2"></i>Campaign Requirements
+                    </h4>
+                    
+                    <div class="mb-3">
+                        <label for="deliverables" class="form-label">Expected Deliverables</label>
+                        <textarea class="form-control" id="deliverables" rows="3" placeholder="e.g., 3 Instagram posts, 5 stories, 1 reel per week"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="minFollowers" class="form-label">Minimum Followers</label>
+                            <input type="number" class="form-control" id="minFollowers" placeholder="e.g., 10000" value="10000">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="minEngagement" class="form-label">Minimum Engagement Rate (%)</label>
+                            <input type="number" class="form-control" id="minEngagement" placeholder="e.g., 2" value="2" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-create-campaign" id="createBtn">
+                        <span id="createText">
+                            <i class="fa-solid fa-rocket me-2"></i>Find Matching Influencers
+                        </span>
+                        <span id="createSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = localStorage.getItem('authToken');
+        
+        // Check if user is logged in
+        if (!authToken) {
+            window.location.href = 'brand_login.html';
+        }
+
+        function showAlert(message, type = 'danger') {
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            document.getElementById('alert-container').innerHTML = alertHTML;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getSelectedCheckboxes(name) {
+            return Array.from(document.querySelectorAll(`input[type="checkbox"][id^="${name}"]:checked`))
+                .map(cb => cb.value);
+        }
+
+        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const createBtn = document.getElementById('createBtn');
+            const createText = document.getElementById('createText');
+            const createSpinner = document.getElementById('createSpinner');
+            
+            // Show loading state
+            createBtn.disabled = true;
+            createText.classList.add('d-none');
+            createSpinner.classList.remove('d-none');
+            
+            // Collect form data
+            const ageGroups = getSelectedCheckboxes('age');
+            const locations = getSelectedCheckboxes('loc');
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            
+            const campaignData = {
+                name: document.getElementById('campaignName').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                budget: parseFloat(document.getElementById('budget').value) || 0,
+                targetAudience: {
+                    ageGroups: ageGroups,
+                    locations: locations,
+                    gender: gender
+                },
+                duration: document.getElementById('duration').value,
+                deliverables: document.getElementById('deliverables').value,
+                minFollowers: parseInt(document.getElementById('minFollowers').value) || 0,
+                minEngagement: parseFloat(document.getElementById('minEngagement').value) || 0
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/campaigns`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(campaignData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAlert('Campaign created successfully! Redirecting to results...', 'success');
+                    
+                    // Store campaign ID and redirect
+                    setTimeout(() => {
+                        window.location.href = `campaign_results.html?id=${data._id}`;
+                    }, 1500);
+                } else {
+                    if (response.status === 401) {
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('userData');
+                        window.location.href = 'brand_login.html';
+                    } else {
+                        showAlert(data.message || 'Failed to create campaign. Please try again.');
+                    }
+                }
+            } catch (error) {
+                showAlert('Network error. Please check your connection.');
+                console.error('Campaign creation error:', error);
+            } finally {
+                // Reset button state
+                createBtn.disabled = false;
+                createText.classList.remove('d-none');
+                createSpinner.classList.add('d-none');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #8c52ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #7041d9;
+        }
+        .response {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+        }
+        .token-display {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h1>BrandScape API Tester</h1>
+    
+    <div class="section">
+        <h2>1. Test Server Health</h2>
+        <button onclick="testHealth()">Check Health</button>
+        <div id="health-response" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>2. Brand Signup</h2>
+        <input type="email" id="signup-email" placeholder="Email" value="test@brand.com"><br>
+        <input type="password" id="signup-password" placeholder="Password" value="password123"><br>
+        <input type="text" id="signup-username" placeholder="Username" value="testbrand"><br>
+        <input type="text" id="signup-name" placeholder="Brand Name" value="Test Brand"><br>
+        <input type="text" id="signup-category" placeholder="Category" value="Fashion"><br>
+        <button onclick="brandSignup()">Sign Up</button>
+        <div id="signup-response" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>3. Brand Login</h2>
+        <input type="email" id="login-email" placeholder="Email" value="test@brand.com"><br>
+        <input type="password" id="login-password" placeholder="Password" value="password123"><br>
+        <button onclick="brandLogin()">Login</button>
+        <div id="login-response" class="response"></div>
+        <div id="token-display" class="token-display" style="display:none;">
+            Token: <span id="token-text"></span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. Get Top Influencers (Requires Login)</h2>
+        <button onclick="getTopInfluencers()">Get Top 10 Influencers</button>
+        <div id="influencers-response" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>5. Create Campaign (Requires Login)</h2>
+        <input type="text" id="campaign-name" placeholder="Campaign Name" value="Summer Collection 2025"><br>
+        <input type="text" id="campaign-category" placeholder="Category" value="Fashion"><br>
+        <input type="text" id="campaign-description" placeholder="Description" value="Launching our new summer fashion line"><br>
+        <button onclick="createCampaign()">Create Campaign</button>
+        <div id="campaign-response" class="response"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = '';
+
+        function displayResponse(elementId, data) {
+            document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                displayResponse('health-response', data);
+            } catch (error) {
+                displayResponse('health-response', { error: error.message });
+            }
+        }
+
+        async function brandSignup() {
+            try {
+                const response = await fetch(`${API_URL}/auth/brand/signup`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('signup-email').value,
+                        password: document.getElementById('signup-password').value,
+                        username: document.getElementById('signup-username').value,
+                        name: document.getElementById('signup-name').value,
+                        category: document.getElementById('signup-category').value,
+                        bio: 'Test brand bio'
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.token) {
+                    authToken = data.token;
+                    document.getElementById('token-display').style.display = 'block';
+                    document.getElementById('token-text').textContent = authToken;
+                }
+                
+                displayResponse('signup-response', data);
+            } catch (error) {
+                displayResponse('signup-response', { error: error.message });
+            }
+        }
+
+        async function brandLogin() {
+            try {
+                const response = await fetch(`${API_URL}/auth/brand/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('login-email').value,
+                        password: document.getElementById('login-password').value
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.token) {
+                    authToken = data.token;
+                    document.getElementById('token-display').style.display = 'block';
+                    document.getElementById('token-text').textContent = authToken;
+                }
+                
+                displayResponse('login-response', data);
+            } catch (error) {
+                displayResponse('login-response', { error: error.message });
+            }
+        }
+
+        async function getTopInfluencers() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/influencers/top?limit=10`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                const data = await response.json();
+                displayResponse('influencers-response', data);
+            } catch (error) {
+                displayResponse('influencers-response', { error: error.message });
+            }
+        }
+
+        async function createCampaign() {
+            if (!authToken) {
+                alert('Please login first!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/campaigns`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('campaign-name').value,
+                        category: document.getElementById('campaign-category').value,
+                        description: document.getElementById('campaign-description').value,
+                        budget: 50000,
+                        targetAudience: {
+                            ageGroups: ['18-24', '25-34'],
+                            locations: ['US', 'India'],
+                            gender: 'All'
+                        }
+                    })
+                });
+                const data = await response.json();
+                displayResponse('campaign-response', data);
+            } catch (error) {
+                displayResponse('campaign-response', { error: error.message });
+            }
+        }
+    </script>
+</body>
+</html>

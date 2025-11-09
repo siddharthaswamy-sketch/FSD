@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Results | BrandScape</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #f8f9ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #eee;
+            padding-top: 1rem;
+            position: fixed;
+            width: 250px;
+        }
+        
+        .sidebar .brand-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .brand-logo h4 {
+            color: #6a42f5;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            margin: 4px 10px;
+            color: #444;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a.active,
+        .sidebar a:hover {
+            background: #f0ebff;
+            color: #6a42f5;
+        }
+        
+        .sidebar a i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .campaign-info {
+            background: linear-gradient(135deg, #8c52ff, #b388ff);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .campaign-info h2 {
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        
+        .campaign-info p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6a42f5;
+            margin: 10px 0;
+        }
+        
+        .stats-card p {
+            color: #666;
+            margin: 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .influencer-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .influencer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .influencer-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .influencer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8c52ff, #b388ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .influencer-info {
+            flex: 1;
+        }
+        
+        .influencer-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .influencer-username {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        
+        .category-badge {
+            background: #f0ebff;
+            color: #6a42f5;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .match-score {
+            background: linear-gradient(135deg, #8c52ff, #b388ff);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .match-score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .match-score-label {
+            font-size: 0.75rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .influencer-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+        }
+        
+        .influencer-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-view-profile {
+            flex: 1;
+            background: #e6d7ff;
+            color: #6a0dad;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-view-profile:hover {
+            background: #d4bfff;
+        }
+        
+        .btn-contact {
+            flex: 1;
+            background: linear-gradient(135deg, #8c52ff, #7a45e6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-contact:hover {
+            background: linear-gradient(135deg, #7a45e6, #6838cc);
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6a42f5;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="brand-logo">
+            <i class="fa-solid fa-link" style="font-size: 30px; color: #6a42f5;"></i>
+            <h4>BrandScape</h4>
+        </div>
+        <a href="index.html">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+        <a href="create_campaign.html">
+            <i class="fa-solid fa-bullhorn"></i> Start Campaign
+        </a>
+        <a href="my_campaigns.html" class="active">
+            <i class="fa-solid fa-list"></i> My Campaigns
+        </a>
+        <a href="profile.html">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <h4>Finding the best influencer matches for your campaign...</h4>
+            <p class="text-muted">This may take a few moments</p>
+        </div>
+
+        <!-- Campaign Content (hidden initially) -->
+        <div id="campaignContent" style="display: none;">
+            <!-- Campaign Info -->
+            <div class="campaign-info">
+                <h2 id="campaignName">Campaign Name</h2>
+                <p id="campaignDescription">Campaign description</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fa-solid fa-users" style="font-size: 2rem; color: #6a42f5;"></i>
+                        <h3 id="totalMatches">0</h3>
+                        <p>Matched Influencers</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fa-solid fa-chart-line" style="font-size: 2rem; color: #6a42f5;"></i>
+                        <h3 id="avgEngagement">0%</h3>
+                        <p>Avg Engagement</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fa-solid fa-user-group" style="font-size: 2rem; color: #6a42f5;"></i>
+                        <h3 id="totalReach">0</h3>
+                        <p>Total Reach</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fa-solid fa-star" style="font-size: 2rem; color: #6a42f5;"></i>
+                        <h3 id="avgMatch">0%</h3>
+                        <p>Avg Match Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Influencers List -->
+            <div>
+                <h3 class="section-title">
+                    <i class="fa-solid fa-trophy me-2" style="color: #6a42f5;"></i>Top Matched Influencers
+                </h3>
+                <div id="influencersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let authToken = localStorage.getItem('authToken');
+        
+        // Check if user is logged in
+        if (!authToken) {
+            window.location.href = 'brand_login.html';
+        }
+
+        // Get campaign ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const campaignId = urlParams.get('id');
+
+        if (!campaignId) {
+            window.location.href = 'my_campaigns.html';
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num;
+        }
+
+        async function loadCampaignResults() {
+    try {
+        const response = await fetch(`${API_URL}/campaigns/${campaignId}`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                window.location.href = 'brand_login.html';
+                return;
+            }
+            throw new Error('Failed to fetch campaign');
+        }
+
+        const campaign = await response.json();
+        console.log('Campaign data:', campaign); // DEBUG
+        
+        // Display campaign info
+        document.getElementById('campaignName').textContent = campaign.name;
+        document.getElementById('campaignDescription').textContent = campaign.description || 'No description';
+        
+        // Calculate stats
+        const influencers = campaign.topInfluencers || [];
+        console.log('Influencers:', influencers); // DEBUG
+        
+        document.getElementById('totalMatches').textContent = influencers.length;
+        
+        if (influencers.length > 0) {
+            const avgEng = influencers.reduce((sum, inf) => {
+                const engRate = inf.influencerId?.engagement_rate || 0;
+                return sum + engRate;
+            }, 0) / influencers.length;
+            document.getElementById('avgEngagement').textContent = avgEng.toFixed(2) + '%';
+            
+            const totalReach = influencers.reduce((sum, inf) => {
+                return sum + (inf.influencerId?.followers || 0);
+            }, 0);
+            document.getElementById('totalReach').textContent = formatNumber(totalReach);
+            
+            const avgMatch = influencers.reduce((sum, inf) => {
+                return sum + (inf.brandMatchScore || 0);
+            }, 0) / influencers.length;
+            document.getElementById('avgMatch').textContent = (avgMatch * 100).toFixed(0) + '%';
+            
+            // Display influencers
+            displayInfluencers(influencers);
+        } else {
+            document.getElementById('influencersList').innerHTML = `
+                <div class="alert alert-info text-center">
+                    <i class="fa-solid fa-info-circle me-2"></i>
+                    No influencers found. Please check backend logs.
+                </div>
+            `;
+        }
+        
+        // Hide loading, show content
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('campaignContent').style.display = 'block';
+        
+    } catch (error) {
+        console.error('Error loading campaign:', error);
+        document.getElementById('loading').innerHTML = `
+            <div class="alert alert-danger">
+                <h4>Error Loading Campaign</h4>
+                <p>${error.message}</p>
+                <p>Check console for details</p>
+                <button class="btn btn-primary" onclick="window.location.href='my_campaigns.html'">
+                    Back to Campaigns
+                </button>
+            </div>
+        `;
+    }
+}
+
+    function displayInfluencers(influencers) {
+    const container = document.getElementById('influencersList');
+    container.innerHTML = '';
+
+    influencers.forEach((item, index) => {
+        const inf = item.influencerId;
+        if (!inf) return;
+        
+        const initials = inf.name ? inf.name.charAt(0).toUpperCase() : inf.username.charAt(0).toUpperCase();
+        const matchScore = (item.brandMatchScore * 100).toFixed(0);
+        
+        // Get match data details
+        const matchData = item.matchData || {};
+        
+        // ===== FIX: Calculate authenticity based on bot_score =====
+        const botScore = matchData.bot_score || 0;
+        const authenticityPercent = ((1 - botScore) * 100).toFixed(0);
+        
+        // ===== FIX: Sentiment score is already 0-100, don't multiply by 100 =====
+        const sentimentScore = (matchData.sentiment_score || 0).toFixed(0);
+        
+        const card = document.createElement('div');
+        card.className = 'influencer-card';
+        
+        card.innerHTML = `
+            <div class="influencer-header">
+                <div class="influencer-avatar">${initials}</div>
+                <div class="influencer-info">
+                    <h3 class="influencer-name">${inf.name || inf.username}</h3>
+                    <div class="influencer-username">@${inf.username}</div>
+                    ${inf.category ? `<span class="category-badge">${inf.category}</span>` : ''}
+                </div>
+                <div class="match-score">
+                    <p class="match-score-value">${matchScore}%</p>
+                    <p class="match-score-label">MATCH</p>
+                </div>
+            </div>
+            
+            <div class="influencer-stats">
+                <div class="stat-item">
+                    <p class="stat-value">${formatNumber(inf.followers || 0)}</p>
+                    <p class="stat-label">Followers</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">${(inf.engagement_rate || 0).toFixed(2)}%</p>
+                    <p class="stat-label">Engagement</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">${authenticityPercent}%</p>
+                    <p class="stat-label">Authenticity</p>
+                </div>
+                <div class="stat-item">
+                    <p class="stat-value">${inf.dominant_sentiment || 'N/A'}</p>
+                    <p class="stat-label">Sentiment</p>
+                </div>
+            </div>
+            
+            ${matchData.category_relevance_score ? `
+                <div class="match-details" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                    <small style="color: #666; display: block; margin-bottom: 8px;"><strong>Match Breakdown:</strong></small>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 12px;">
+                        <div>
+                            <span style="color: #888;">Category Match:</span>
+                            <strong style="color: #6a42f5;"> ${(matchData.category_relevance_score * 100).toFixed(0)}%</strong>
+                        </div>
+                        <div>
+                            <span style="color: #888;">Sentiment:</span>
+                            <strong style="color: #6a42f5;"> ${sentimentScore}%</strong>
+                        </div>
+                        <div>
+                            <span style="color: #888;">Engagement:</span>
+                            <strong style="color: #6a42f5;"> ${(matchData.engagement_rate_scaled * 100).toFixed(0)}%</strong>
+                        </div>
+                        <div>
+                            <span style="color: #888;">Authenticity:</span>
+                            <strong style="color: #6a42f5;"> ${authenticityPercent}%</strong>
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+            
+            <div class="influencer-actions">
+                <button class="btn-view-profile" onclick="viewProfile('${inf._id}', '${campaignId}')">
+                    <i class="fa-solid fa-chart-line me-2"></i>View Full Insights
+                </button>
+                <button class="btn-contact">
+                    <i class="fa-solid fa-envelope me-2"></i>Contact
+                </button>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+function viewProfile(influencerId, campaignId) {
+    window.location.href = `view_insight.html?id=${influencerId}&campaign=${campaignId}`;
+}
+    // Load campaign results
+    loadCampaignResults();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

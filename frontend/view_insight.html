@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Influencer Insights | BrandScape</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f9f9fb;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .back-btn {
+            background: #f0ebff;
+            color: #6a42f5;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #e0d7ff;
+            color: #6a42f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        
+        /* Brand Match Section */
+        .brand-match-section {
+            background: linear-gradient(135deg, #8e17c1, #b388ff);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(142, 23, 193, 0.3);
+        }
+
+        .brand-match-section h3 {
+            margin: 0 0 20px 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .match-score-large {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .match-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .breakdown-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .breakdown-item .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .breakdown-item .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8c52ff, #b388ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4b2d6e;
+            letter-spacing: 0.5px;
+            margin: 0;
+            text-transform: capitalize;
+            transition: color 0.3s;
+        }
+
+        .profile-name:hover {
+            color: #8e17c1;
+        }
+
+        .metrics-container {
+            background-color: #E6E0FF;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-box {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+
+        .metric-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-box h4 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #4b2d6e;
+        }
+
+        .metric-box p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            margin: auto;
+        }
+        
+        .btn-collaborate {
+            background-color: #8e17c1;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn-collaborate:hover {
+            background-color: #bd8bf3;
+            box-shadow: 0 6px 12px rgba(141, 118, 232, 0.4);
+        }
+        
+        .section-header {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        
+        .demographics .card {
+            border: none;
+            border-radius: 12px;
+            background-color: #f7f6ff;
+            margin-bottom: 20px;
+        }
+        
+        .demographics .card-body {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .demographics .card-body h6 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .demographics .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #8e17c1;
+        }
+        
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+            background-color: #e9e9f0;
+        }
+        
+        .progress-bar {
+            background-color: #e63946;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6a42f5;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .chart-legend {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .chart-legend div {
+            display: inline-block;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <h4>Loading influencer insights...</h4>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" id="mainContent" style="display: none;">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back
+        </a>
+
+        <!-- Brand Match Section (will be inserted here dynamically if campaign data exists) -->
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><b>Influencer Insights</b></h2>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="d-flex align-items-center mb-4">
+            <div class="profile-img me-3" id="profileAvatar">A</div>
+            <div>
+                <h4 class="profile-name" id="influencerName">Loading...</h4>
+                <p class="text-muted mb-0" id="influencerCategory">Category</p>
+                <p class="text-muted" id="influencerUsername">@username</p>
+            </div>
+        </div>
+
+        <!-- Metrics -->
+        <div class="row text-center g-3 mb-4">
+            <div class="col metric-box">
+                <h4 id="followers">-</h4>
+                <p>Followers</p>
+            </div>
+            <div class="col metric-box">
+                <h4 id="engagement">-</h4>
+                <p>Engagement Rate</p>
+            </div>
+            <div class="col metric-box">
+                <h4 id="authenticity">-</h4>
+                <p>Authenticity</p>
+            </div>
+            <div class="col metric-box">
+                <h4 id="posts">-</h4>
+                <p>Total Posts</p>
+            </div>
+        </div>
+
+        <!-- Bot Score -->
+        <div class="mb-5">
+            <div class="section-header">Bot Score</div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" id="botScoreBar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+            </div>
+            <small class="text-muted">Lower is better - indicates fewer fake followers</small>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Charts Column -->
+            <div class="col-md-8">
+                <div class="row mb-4 justify-content-center">
+                    <div class="col-md-6 text-center mb-4">
+                        <div class="section-header">Sentiment Analysis</div>
+                        <div class="chart-container">
+                            <canvas id="sentimentChart"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div><span style="background-color: #8e17c1; width: 12px; height: 12px; display: inline-block; border-radius: 3px; margin-right: 5px;"></span> Positive</div>
+                            <div><span style="background-color: #e194f3; width: 12px; height: 12px; display: inline-block; border-radius: 3px; margin-right: 5px;"></span> Neutral</div>
+                            <div><span style="background-color: #f0b5f3; width: 12px; height: 12px; display: inline-block; border-radius: 3px; margin-right: 5px;"></span> Negative</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center mb-4">
+                        <div class="section-header">Engagement Distribution</div>
+                        <div class="chart-container">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                        <div class="chart-legend">
+                            <div><span style="background-color: #8e17c1; width: 12px; height: 12px; display: inline-block; border-radius: 3px; margin-right: 5px;"></span> Likes</div>
+                            <div><span style="background-color: #e9e9f0; width: 12px; height: 12px; display: inline-block; border-radius: 3px; margin-right: 5px;"></span> Comments</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demographics Column -->
+            <div class="col-md-4 demographics">
+                <div class="section-header">Quick Stats</div>
+
+                <!-- Likes -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="fas fa-heart"></i></div>
+                        <h6 class="fw-bold">Total Likes</h6>
+                        <p id="totalLikes">-</p>
+                    </div>
+                </div>
+
+                <!-- Comments -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="fas fa-comment"></i></div>
+                        <h6 class="fw-bold">Total Comments</h6>
+                        <p id="totalComments">-</p>
+                    </div>
+                </div>
+
+                <!-- Pagerank -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="fas fa-star"></i></div>
+                        <h6 class="fw-bold">PageRank Score</h6>
+                        <p id="pagerank">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collaborate Button -->
+        <div class="text-center mt-5">
+            <button class="btn btn-collaborate" onclick="contactInfluencer()">
+                <i class="fa-solid fa-envelope me-2"></i>Let's Collaborate
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script>
+    const API_URL = 'http://localhost:5000/api';
+    let authToken = localStorage.getItem('authToken');
+    
+    // Check if user is logged in
+    if (!authToken) {
+        window.location.href = 'brand_login.html';
+    }
+
+    // Get influencer identifier from URL (can be ID or username)
+    const urlParams = new URLSearchParams(window.location.search);
+    const influencerId = urlParams.get('id');
+    const influencerUsername = urlParams.get('username');
+    const campaignId = urlParams.get('campaign');
+
+    if (!influencerId && !influencerUsername) {
+        window.location.href = 'index.html';
+    }
+
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num;
+    }
+
+    // Calculate authenticity label based on bot score
+    function getAuthenticityLabel(botScore) {
+        if (botScore <= 0.5) {
+            return { label: 'Authentic', percentage: ((1 - botScore) * 100).toFixed(0), class: 'success' };
+        } else if (botScore <= 0.75) {
+            return { label: 'Moderate', percentage: ((1 - botScore) * 100).toFixed(0), class: 'warning' };
+        } else {
+            return { label: 'Likely Bot', percentage: ((1 - botScore) * 100).toFixed(0), class: 'danger' };
+        }
+    }
+
+    async function loadInfluencerData() {
+    try {
+        let apiUrl;
+        if (influencerUsername) {
+            apiUrl = `${API_URL}/dashboard-influencers/username/${influencerUsername}`;
+            console.log('Loading from DashboardInfluencer:', influencerUsername);
+        } else {
+            apiUrl = `${API_URL}/influencers/${influencerId}`;
+            console.log('Loading from Influencer:', influencerId);
+        }
+
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                window.location.href = 'brand_login.html';
+                return;
+            }
+            throw new Error('Failed to fetch influencer data');
+        }
+
+        const influencer = await response.json();
+        
+        // ===== CRITICAL DEBUG =====
+        console.log('=== INFLUENCER DATA DEBUG ===');
+        console.log('Full data:', influencer);
+        console.log('total_likes:', influencer.total_likes);
+        console.log('likes:', influencer.likes);
+        console.log('comments:', influencer.comments);
+        console.log('positive_percentage:', influencer.positive_percentage);
+        console.log('neutral_percentage:', influencer.neutral_percentage);
+        console.log('negative_percentage:', influencer.negative_percentage);
+        console.log('============================');
+        
+        let brandMatchData = null;
+        if (campaignId) {
+            brandMatchData = await loadBrandMatchScore(campaignId, influencer._id);
+        }
+        
+        displayInfluencerData(influencer, brandMatchData);
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        
+    } catch (error) {
+        console.error('Error loading influencer:', error);
+        document.getElementById('loading').innerHTML = `
+            <div class="alert alert-danger">
+                <h4>Error Loading Data</h4>
+                <p>${error.message}</p>
+                <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                    Back to Dashboard
+                </button>
+            </div>
+        `;
+    }
+}
+
+    async function loadBrandMatchScore(campaignId, influencerId) {
+        try {
+            const response = await fetch(`${API_URL}/campaigns/${campaignId}`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (response.ok) {
+                const campaign = await response.json();
+                const match = campaign.topInfluencers.find(inf => 
+                    inf.influencerId._id === influencerId || inf.influencerId === influencerId
+                );
+                return match;
+            }
+        } catch (error) {
+            console.error('Error loading brand match:', error);
+        }
+        return null;
+    }
+
+    function displayInfluencerData(inf, matchData) {
+    console.log('Displaying influencer data:', inf);
+    console.log('Match data:', matchData);
+    
+    // Profile info
+    const initials = inf.name ? inf.name.charAt(0).toUpperCase() : inf.username.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').textContent = initials;
+    document.getElementById('influencerName').textContent = inf.name || inf.username;
+    document.getElementById('influencerCategory').textContent = inf.category || 'Unknown Category';
+    document.getElementById('influencerUsername').textContent = `@${inf.username}`;
+
+    // Brand match section with FIXED authenticity and sentiment
+    if (matchData && matchData.brandMatchScore) {
+        // ===== FIX: Calculate authenticity based on bot_score =====
+        const botScore = matchData.matchData?.bot_score || 0;
+        const authenticityPercent = ((1 - botScore) * 100).toFixed(0);
+        
+        // ===== FIX: Sentiment score is 0-100, don't multiply =====
+        const sentimentScore = (matchData.matchData?.sentiment_score || 0).toFixed(0);
+        
+        const matchScoreSection = `
+            <div class="brand-match-section">
+                <h3>
+                    <i class="fa-solid fa-star"></i>
+                    Brand Match Analysis
+                </h3>
+                <div class="text-center">
+                    <div class="match-score-large">${(matchData.brandMatchScore * 100).toFixed(0)}%</div>
+                    <p style="font-size: 1.2rem; margin: 0; opacity: 0.95;">Overall Match Score</p>
+                </div>
+                ${matchData.matchData ? `
+                    <div class="match-breakdown">
+                        <div class="breakdown-item">
+                            <span class="value">${(matchData.matchData.category_relevance_score * 100).toFixed(0)}%</span>
+                            <span class="label">Category Relevance</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="value">${(matchData.matchData.engagement_rate_scaled * 100).toFixed(0)}%</span>
+                            <span class="label">Engagement Quality</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="value">${sentimentScore}%</span>
+                            <span class="label">Audience Sentiment</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="value">${authenticityPercent}%</span>
+                            <span class="label">Authenticity</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="value">${(matchData.matchData.pagerank * 1000).toFixed(2)}</span>
+                            <span class="label">Influence Score</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="value">${(matchData.matchData.sponsored_posts_scaled * 100).toFixed(0)}%</span>
+                            <span class="label">Sponsorship Exp.</span>
+                        </div>
+                    </div>
+                ` : ''}
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.3);">
+                    <small style="opacity: 0.9;">
+                        <i class="fa-solid fa-info-circle me-1"></i>
+                        This score is calculated based on category alignment, engagement quality, audience sentiment, 
+                        authenticity, influence reach, and sponsored content experience.
+                    </small>
+                </div>
+            </div>
+        `;
+        
+        const container = document.querySelector('.container');
+        const backBtn = container.querySelector('.back-btn');
+        backBtn.insertAdjacentHTML('afterend', matchScoreSection);
+    }
+
+    // Rest of the metrics...
+    document.getElementById('followers').textContent = formatNumber(inf.followers || 0);
+    document.getElementById('engagement').textContent = (inf.engagement_rate || 0).toFixed(2) + '%';
+    
+    const authenticityData = getAuthenticityLabel(inf.bot_score || 0);
+    document.getElementById('authenticity').textContent = `${authenticityData.percentage}% (${authenticityData.label})`;
+    
+    document.getElementById('posts').textContent = formatNumber(inf.total_posts || inf.posts || inf.num_posts || 0);
+
+    const botScore = ((inf.bot_score || 0) * 100).toFixed(0);
+    document.getElementById('botScoreBar').style.width = botScore + '%';
+    document.getElementById('botScoreBar').textContent = botScore + '%';
+    document.getElementById('botScoreBar').setAttribute('aria-valuenow', botScore);
+
+    // ===== FIX: Handle both total_likes and likes fields =====
+    const totalLikes = inf.total_likes || inf.likes || 0;
+    const totalComments = inf.comments || 0;
+    
+    console.log('=== STATS DEBUG ===');
+    console.log('Source:', inf.total_likes ? 'DashboardInfluencer' : 'Influencer');
+    console.log('total_likes:', inf.total_likes);
+    console.log('likes:', inf.likes);
+    console.log('comments:', inf.comments);
+    console.log('Using - Likes:', totalLikes, 'Comments:', totalComments);
+    
+    document.getElementById('totalLikes').textContent = formatNumber(totalLikes);
+    document.getElementById('totalComments').textContent = formatNumber(totalComments);
+    document.getElementById('pagerank').textContent = (inf.pagerank || 0).toFixed(4);
+
+    // Create Charts
+    createSentimentChart(inf);
+    createEngagementChart(inf);
+}
+
+    function createSentimentChart(inf) {
+    const ctx = document.getElementById('sentimentChart');
+    if (!ctx) {
+        console.error('Sentiment chart canvas not found');
+        return;
+    }
+
+    // ===== FIX: Handle both field names =====
+    // Old: positive_percentage, neutral_percentage, negative_percentage
+    // New: positive_pct, neutral_pct, negative_pct
+    const positive = parseFloat(inf.positive_pct || inf.positive_percentage) || 0;
+    const neutral = parseFloat(inf.neutral_pct || inf.neutral_percentage) || 0;
+    const negative = parseFloat(inf.negative_pct || inf.negative_percentage) || 0;
+
+    console.log('=== SENTIMENT DEBUG ===');
+    console.log('positive_pct:', inf.positive_pct);
+    console.log('positive_percentage:', inf.positive_percentage);
+    console.log('Using values - Positive:', positive, 'Neutral:', neutral, 'Negative:', negative);
+    console.log('======================');
+
+    if (positive === 0 && neutral === 0 && negative === 0) {
+        console.warn('No sentiment data available');
+        ctx.parentElement.innerHTML = '<div class="text-center"><p class="text-muted">No sentiment data available</p></div>';
+        return;
+    }
+
+    new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Positive', 'Neutral', 'Negative'],
+            datasets: [{
+                data: [positive, neutral, negative],
+                backgroundColor: ['#8e17c1', '#e194f3', '#f0b5f3'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            cutout: '70%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { 
+                    display: false 
+                },
+                tooltip: { 
+                    enabled: true,
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.parsed.toFixed(1) + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+    function createEngagementChart(inf) {
+        const ctx = document.getElementById('engagementChart');
+        if (!ctx) {
+            console.error('Engagement chart canvas not found');
+            return;
+        }
+
+        const likes = inf.total_likes || inf.likes || 0;
+        const comments = inf.comments || 0;
+        
+        console.log('Engagement data - Likes:', likes, 'Comments:', comments);
+
+        if (likes === 0 && comments === 0) {
+            console.warn('No engagement data available');
+            ctx.parentElement.innerHTML = '<p class="text-muted">No engagement data available</p>';
+            return;
+        }
+        
+        new Chart(ctx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Likes', 'Comments'],
+                datasets: [{
+                    data: [likes, comments],
+                    backgroundColor: ['#8e17c1', '#e9e9f0'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                cutout: '70%',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { 
+                        display: false 
+                    },
+                    tooltip: { 
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + formatNumber(context.parsed);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function contactInfluencer() {
+        alert('Contact feature coming soon! This will allow you to send collaboration requests directly to influencers.');
+    }
+
+    // Load data
+    loadInfluencerData();
+</script>
+</body>
+</html>

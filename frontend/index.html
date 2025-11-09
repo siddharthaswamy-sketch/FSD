@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | BrandScape</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: #f8f9ff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #eee;
+            padding-top: 1rem;
+            position: fixed;
+            width: 250px;
+            z-index: 1000;
+        }
+        
+        .sidebar .brand-logo {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar .brand-logo h4 {
+            color: #6a42f5;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            margin: 4px 10px;
+            color: #444;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sidebar a.active,
+        .sidebar a:hover {
+            background: #f0ebff;
+            color: #6a42f5;
+        }
+        
+        .sidebar a i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-text h3 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .welcome-text p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .logout-btn:hover {
+            background: #ee5a6f;
+        }
+        
+        .dashboard-card {
+            background: #f3e8ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .dashboard-title {
+            color: #6a0dad;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .card-kpi {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-kpi h4 {
+            margin: 5px 0;
+            font-weight: bold;
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .card-kpi p {
+            margin: 0;
+            color: #666;
+        }
+        
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .search-bar input:focus {
+            border-color: #6a42f5;
+        }
+        
+        /* Horizontal Scrolling Container */
+        .influencer-scroll-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+        
+        .scroll-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .scroll-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6a42f5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .scroll-btn:hover {
+            background: #5531d9;
+            transform: scale(1.1);
+        }
+        
+        .scroll-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        
+        .influencer-row {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        .influencer-row::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .influencer-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            cursor: pointer;
+            min-width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .influencer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .influencer-card .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8c52ff, #b388ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 10px;
+        }
+        
+        .influencer-card h6 {
+            font-weight: bold;
+            margin: 5px 0;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .influencer-card .handle {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+        
+        .influencer-card .category-badge {
+            background: #f0ebff;
+            color: #6a42f5;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        
+        .influencer-card .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .influencer-card .stats div {
+            text-align: center;
+        }
+        
+        .influencer-card .stats strong {
+            font-size: 16px;
+            display: block;
+            color: #000;
+            margin-bottom: 2px;
+        }
+        
+        .influencer-card .stats span {
+            font-size: 11px;
+            color: #666;
+        }
+        
+        .btn-custom {
+            background: #e6d7ff;
+            color: #6a0dad;
+            border-radius: 8px;
+            font-size: 14px;
+            padding: 8px 16px;
+            border: none;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-custom:hover {
+            background: #d4bfff;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #6a42f5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .page-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .page-btn {
+            background: #6a42f5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: #5531d9;
+        }
+        
+        .page-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .page-info {
+            color: #666;
+            font-weight: 600;
+        }
+    </style>
+    </head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="brand-logo">
+            <i class="fa-solid fa-link" style="font-size: 30px; color: #6a42f5;"></i>
+            <h4>BrandScape</h4>
+        </div>
+        <a href="index.html" class="active">
+            <i class="fa-solid fa-house"></i> Dashboard
+        </a>
+        <a href="create_campaign.html">
+            <i class="fa-solid fa-bullhorn"></i> Start Campaign
+        </a>
+        <a href="my_campaigns.html">
+            <i class="fa-solid fa-list"></i> My Campaigns
+        </a>
+        <a href="profile.html">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
+    </div>
+    <!-- Main Content -->
+<div class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="welcome-text">
+            <h3>Welcome back, <span id="brandName">Brand</span>! 👋</h3>
+            <p>Discover top influencers for your campaigns</p>
+        </div>
+        <div class="user-info">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- KPI Section -->
+    <div class="dashboard-card">
+        <div class="dashboard-title">Platform Overview</div>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card-kpi">
+                    <h4 id="totalInfluencers">-</h4>
+                    <p>Total Influencers</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-kpi">
+                    <h4 id="avgEngagement">-</h4>
+                    <p>Avg Engagement</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-kpi">
+                    <h4 id="topCategories">-</h4>
+                    <p>Categories</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card-kpi">
+                    <h4 id="activeCampaigns">0</h4>
+                    <p>Your Campaigns</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="🔍 Search influencers by name, username, or category..." />
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading influencers...</p>
+    </div>
+
+    <!-- Influencers Horizontal Scrolling Sections -->
+    <div id="influencersContainer" style="display: none;">
+        <!-- Row 1 -->
+        <div class="influencer-scroll-section">
+            <div class="section-header">
+                <h4 class="section-title">🔥 Top Trending Influencers</h4>
+                <div class="scroll-controls">
+                    <button class="scroll-btn" onclick="scrollRow('row1', -300)">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="scroll-btn" onclick="scrollRow('row1', 300)">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="influencer-row" id="row1"></div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="influencer-scroll-section">
+            <div class="section-header">
+                <h4 class="section-title">⭐ High Engagement Creators</h4>
+                <div class="scroll-controls">
+                    <button class="scroll-btn" onclick="scrollRow('row2', -300)">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="scroll-btn" onclick="scrollRow('row2', 300)">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="influencer-row" id="row2"></div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="influencer-scroll-section">
+            <div class="section-header">
+                <h4 class="section-title">💎 Premium Influencers</h4>
+                <div class="scroll-controls">
+                    <button class="scroll-btn" onclick="scrollRow('row3', -300)">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="scroll-btn" onclick="scrollRow('row3', 300)">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="influencer-row" id="row3"></div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="page-controls">
+            <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                <i class="fa-solid fa-chevron-left me-2"></i>Previous
+            </button>
+            <span class="page-info">
+                Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+            </span>
+            <button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                Next<i class="fa-solid fa-chevron-right ms-2"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let allInfluencers = [];
+    let authToken = localStorage.getItem('authToken');
+    let userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    let currentPage = 1;
+    let totalPages = 1;
+    let isSearching = false;
+
+    // Check if user is logged in
+    if (!authToken) {
+        window.location.href = 'brand_login.html';
+    }
+
+    // Display brand name
+    if (userData.name) {
+        document.getElementById('brandName').textContent = userData.name;
+    }
+
+    // Logout function
+    function logout() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = 'brand_login.html';
+    }
+
+    // Format numbers
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num;
+    }
+
+// Auto-scroll settings
+let autoScrollIntervals = {};
+let rowScrollEnabled = {
+    row1: true, // Top trending - auto-start
+    row2: false, // High engagement - start on scroll
+    row3: false  // Premium - start on scroll
+};
+
+function scrollRow(rowId, amount) {
+    const row = document.getElementById(rowId);
+    row.scrollBy({ left: amount, behavior: 'smooth' });
+    
+    // Pause auto-scroll temporarily when manually scrolling
+    pauseAutoScroll(rowId);
+}
+
+function startAutoScrollForRow(rowId, direction = 'right') {
+    // Clear existing interval if any
+    if (autoScrollIntervals[rowId]) {
+        clearInterval(autoScrollIntervals[rowId]);
+    }
+    
+    // Slower speed for smoother effect
+    const speed = direction === 'right' ? 1 : -1; // 1 pixel per interval
+    const interval = 30; // milliseconds (slower = higher number)
+    
+    autoScrollIntervals[rowId] = setInterval(() => {
+        if (rowScrollEnabled[rowId]) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                const maxScroll = row.scrollWidth - row.clientWidth;
+                
+                if (direction === 'right') {
+                    // Scrolling right
+                    if (row.scrollLeft >= maxScroll - 10) {
+                        // Reset to start smoothly
+                        row.scrollTo({ left: 0, behavior: 'auto' });
+                    } else {
+                        row.scrollBy({ left: speed, behavior: 'auto' });
+                    }
+                } else {
+                    // Scrolling left
+                    if (row.scrollLeft <= 10) {
+                        // Reset to end smoothly
+                        row.scrollTo({ left: maxScroll, behavior: 'auto' });
+                    } else {
+                        row.scrollBy({ left: speed, behavior: 'auto' });
+                    }
+                }
+            }
+        }
+    }, interval);
+}
+
+function startAutoScroll() {
+    // Row 1 (Top Trending) - scrolls right immediately
+    startAutoScrollForRow('row1', 'right');
+}
+
+function pauseAutoScroll(rowId) {
+    rowScrollEnabled[rowId] = false;
+    setTimeout(() => {
+        rowScrollEnabled[rowId] = true;
+    }, 3000); // Resume after 3 seconds
+}
+
+function stopAutoScroll() {
+    Object.values(autoScrollIntervals).forEach(interval => clearInterval(interval));
+    autoScrollIntervals = {};
+}
+
+// Intersection Observer to start scrolling when sections come into view
+function setupScrollTriggers() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3 // Trigger when 30% of section is visible
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const section = entry.target;
+                const rowId = section.querySelector('.influencer-row').id;
+                
+                // Start scrolling when section comes into view
+                if (rowId === 'row2') {
+                    // High engagement - scroll left
+                    rowScrollEnabled.row2 = true;
+                    startAutoScrollForRow('row2', 'left');
+                } else if (rowId === 'row3') {
+                    // Premium - scroll right
+                    rowScrollEnabled.row3 = true;
+                    startAutoScrollForRow('row3', 'right');
+                }
+            }
+        });
+    }, observerOptions);
+    
+    // Observe each section
+    document.querySelectorAll('.influencer-scroll-section').forEach(section => {
+        observer.observe(section);
+    });
+}
+
+// Update the loadInfluencers function - add startAutoScroll at the end
+async function loadInfluencers(page = 1) {
+    try {
+        const response = await fetch(`${API_URL}/dashboard-influencers?page=${page}&limit=30`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                logout();
+                return;
+            }
+            throw new Error('Failed to fetch influencers');
+        }
+
+        const data = await response.json();
+        allInfluencers = data.influencers;
+        currentPage = data.currentPage;
+        totalPages = data.totalPages;
+        
+        updateKPIs(data.totalInfluencers);
+        displayInfluencersInRows(allInfluencers);
+        updatePagination();
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('influencersContainer').style.display = 'block';
+        
+        // ===== START AUTO-SCROLL =====
+        stopAutoScroll(); // Clear any existing intervals
+        startAutoScroll(); // Start row1 immediately
+        
+        // Setup scroll triggers for row2 and row3
+        setTimeout(() => {
+            setupScrollTriggers();
+            setupHoverPause();
+        }, 500);
+        
+    } catch (error) {
+        console.error('Error loading influencers:', error);
+        document.getElementById('loading').innerHTML = `
+            <p style="color: #ff4757;">Failed to load influencers. Please try again.</p>
+            <button class="btn-custom" onclick="loadInfluencers()" style="max-width: 200px; margin: 0 auto;">Retry</button>
+        `;
+    }
+}
+
+// Pause auto-scroll when hovering over cards
+function setupHoverPause() {
+    document.querySelectorAll('.influencer-card').forEach(card => {
+        // Find which row this card belongs to
+        const row = card.closest('.influencer-row');
+        const rowId = row ? row.id : null;
+        
+        card.addEventListener('mouseenter', () => {
+            if (rowId) {
+                rowScrollEnabled[rowId] = false;
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (rowId) {
+                setTimeout(() => {
+                    rowScrollEnabled[rowId] = true;
+                }, 500);
+            }
+        });
+    });
+}
+
+// Clean up on page unload
+window.addEventListener('beforeunload', stopAutoScroll);
+    // Update KPIs
+    function updateKPIs(total) {
+        document.getElementById('totalInfluencers').textContent = formatNumber(total);
+        
+        if (allInfluencers.length > 0) {
+            const avgEngagement = allInfluencers.reduce((sum, inf) => sum + (inf.engagement_rate || 0), 0) / allInfluencers.length;
+            document.getElementById('avgEngagement').textContent = avgEngagement.toFixed(2) + '%';
+            
+            const categories = new Set(allInfluencers.map(inf => inf.category).filter(Boolean));
+            document.getElementById('topCategories').textContent = categories.size;
+        }
+    }
+
+    // Display influencers in 3 horizontal rows (10 per row)
+    function displayInfluencersInRows(influencers) {
+        const row1 = document.getElementById('row1');
+        const row2 = document.getElementById('row2');
+        const row3 = document.getElementById('row3');
+        
+        row1.innerHTML = '';
+        row2.innerHTML = '';
+        row3.innerHTML = '';
+
+        influencers.forEach((influencer, index) => {
+            const card = createInfluencerCard(influencer);
+            
+            // Distribute evenly across 3 rows
+            if (index % 3 === 0) {
+                row1.appendChild(card);
+            } else if (index % 3 === 1) {
+                row2.appendChild(card);
+            } else {
+                row3.appendChild(card);
+            }
+        });
+    }
+
+    function createInfluencerCard(influencer) {
+    const card = document.createElement('div');
+    card.className = 'influencer-card';
+    card.onclick = () => viewInsights(influencer.username);
+    
+    const initials = influencer.name ? influencer.name.charAt(0).toUpperCase() : influencer.username.charAt(0).toUpperCase();
+    
+    // Calculate authenticity label
+    let authenticityLabel = 'N/A';
+    if (influencer.bot_score !== undefined) {
+        if (influencer.bot_score <= 0.5) {
+            authenticityLabel = '✓ Authentic';
+        } else if (influencer.bot_score <= 0.75) {
+            authenticityLabel = '⚠ Moderate';
+        } else {
+            authenticityLabel = '✗ Likely Bot';
+        }
+    }
+    
+    card.innerHTML = `
+        <div class="avatar">${initials}</div>
+        <h6>${influencer.name || influencer.username}</h6>
+        <div class="handle">@${influencer.username}</div>
+        ${influencer.category ? `<span class="category-badge">${influencer.category}</span>` : ''}
+        <div class="stats">
+            <div>
+                <strong>${formatNumber(influencer.followers || 0)}</strong>
+                <span>Followers</span>
+            </div>
+            <div>
+                <strong>${(influencer.engagement_rate || 0).toFixed(1)}%</strong>
+                <span>Engagement</span>
+            </div>
+        </div>
+        <div style="font-size: 11px; color: #666; margin-bottom: 10px;">
+            ${authenticityLabel}
+        </div>
+        <button class="btn-custom" onclick="event.stopPropagation(); viewInsights('${influencer.username}')">
+            View Insights
+        </button>
+    `;
+    
+    return card;
+}
+
+    // Search functionality
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        
+        clearTimeout(searchTimeout);
+        
+        if (searchTerm === '') {
+            isSearching = false;
+            loadInfluencers(currentPage);
+            return;
+        }
+        
+        searchTimeout = setTimeout(async () => {
+            isSearching = true;
+            await searchInfluencers(searchTerm);
+        }, 500);
+    });
+
+    // Search influencers
+    async function searchInfluencers(query) {
+        try {
+            const response = await fetch(`${API_URL}/dashboard-influencers/search?query=${encodeURIComponent(query)}&limit=30`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Search failed');
+            }
+
+            const influencers = await response.json();
+            displayInfluencersInRows(influencers);
+            
+            // Hide pagination during search
+            document.querySelector('.page-controls').style.display = 'none';
+            
+        } catch (error) {
+            console.error('Error searching influencers:', error);
+        }
+    }
+
+    // Update pagination controls
+    function updatePagination() {
+        document.getElementById('currentPage').textContent = currentPage;
+        document.getElementById('totalPages').textContent = totalPages;
+        
+        document.getElementById('prevBtn').disabled = currentPage === 1;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        
+        // Show pagination only when not searching
+        if (isSearching) {
+            document.querySelector('.page-controls').style.display = 'none';
+        } else {
+            document.querySelector('.page-controls').style.display = 'flex';
+        }
+    }
+
+    // Change page
+    function changePage(direction) {
+        const newPage = currentPage + direction;
+        if (newPage >= 1 && newPage <= totalPages) {
+            loadInfluencers(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    // View insights - redirect to detailed view using username
+    function viewInsights(username) {
+        window.location.href = `view_insight.html?username=${username}`;
+    }
+
+    // Load data on page load
+    loadInfluencers();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

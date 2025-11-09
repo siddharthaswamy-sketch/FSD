@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandScape | Connect Brands & Influencers</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f8f4ff 0%, #e8dcff 50%, #d4c5ff 100%);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #333;
+    }
+    
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .animated-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+    
+    .bubble-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(179, 136, 255, 0.3), rgba(140, 82, 255, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(140, 82, 255, 0.2);
+      transition: transform 0.2s ease;
+    }
+    
+    .connection-line {
+      position: absolute;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(140, 82, 255, 0), rgba(140, 82, 255, 0.6), rgba(140, 82, 255, 0));
+      transform-origin: left center;
+      pointer-events: none;
+      box-shadow: 0 0 10px rgba(140, 82, 255, 0.5);
+    }
+    
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      justify-content: center;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #8c52ff, #b388ff);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(140, 82, 255, 0.3);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(140, 82, 255, 0.3);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(140, 82, 255, 0.5);
+      }
+    }
+    
+    .brand-name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #8c52ff, #5e35b1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 50px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .cta-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 280px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    
+    .cta-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 50px rgba(140, 82, 255, 0.2);
+      color: inherit;
+    }
+    
+    .cta-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .brand-card .cta-icon {
+      background: linear-gradient(135deg, #8c52ff, #b388ff);
+      color: white;
+    }
+    
+    .influencer-card .cta-icon {
+      background: linear-gradient(135deg, #333, #555);
+      color: white;
+    }
+    
+    .cta-card:hover .cta-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .cta-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .cta-description {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    
+    .features {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #8c52ff;
+      font-weight: 500;
+    }
+    
+    .feature-item i {
+      font-size: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .cta-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .cta-card {
+        width: 100%;
+        max-width: 350px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg">
+    <div class="bubble-container" id="bubbleContainer"></div>
+  </div>
+
+  <section class="hero-section">
+    <div class="container content-wrapper">
+      <div class="text-center">
+        <div class="logo-container">
+          <div class="logo">
+            <i class="fa-solid fa-link"></i>
+          </div>
+          <h1 class="brand-name">BrandScape</h1>
+        </div>
+        
+        <h2 class="hero-title">Connect. Collaborate. Create.</h2>
+        <p class="hero-subtitle">The ultimate platform bridging top brands with authentic influencers for meaningful partnerships that drive real results.</p>
+        
+        <div class="cta-container">
+          <a href="brand_login.html" class="cta-card brand-card">
+            <div class="cta-icon">
+              <i class="fa-solid fa-building"></i>
+            </div>
+            <h3 class="cta-title">For Brands</h3>
+            <p class="cta-description">Find the perfect influencers to amplify your brand message and reach your target audience.</p>
+          </a>
+          
+          <a href="influencer_login.html" class="cta-card influencer-card">
+            <div class="cta-icon">
+              <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+            <h3 class="cta-title">For Influencers</h3>
+            <p class="cta-description">Discover exciting brand partnerships and monetize your influence with authentic collaborations.</p>
+          </a>
+        </div>
+        
+        <div class="features">
+          <div class="feature-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Secure Platform</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Real-Time Analytics</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Verified Partners</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const container = document.getElementById('bubbleContainer');
+    const bubbles = [];
+    const bubbleCount = 15;
+    
+    class Bubble {
+      constructor(index) {
+        this.element = document.createElement('div');
+        this.element.className = 'bubble';
+        this.size = 50 + Math.random() * 60;
+        this.element.style.width = this.size + 'px';
+        this.element.style.height = this.size + 'px';
+        
+        this.x = Math.random() * (window.innerWidth - this.size);
+        this.y = Math.random() * (window.innerHeight - this.size);
+        this.vx = (Math.random() - 0.5) * 1.5;
+        this.vy = (Math.random() - 0.5) * 1.5;
+        
+        this.element.style.left = this.x + 'px';
+        this.element.style.top = this.y + 'px';
+        
+        container.appendChild(this.element);
+      }
+      
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        if (this.x <= 0 || this.x >= window.innerWidth - this.size) {
+          this.vx *= -1;
+          this.x = Math.max(0, Math.min(this.x, window.innerWidth - this.size));
+        }
+        if (this.y <= 0 || this.y >= window.innerHeight - this.size) {
+          this.vy *= -1;
+          this.y = Math.max(0, Math.min(this.y, window.innerHeight - this.size));
+        }
+        
+        this.element.style.left = this.x + 'px';
+        this.element.style.top = this.y + 'px';
+      }
+      
+      getCenter() {
+        return {
+          x: this.x + this.size / 2,
+          y: this.y + this.size / 2
+        };
+      }
+    }
+    
+    // Create bubbles
+    for (let i = 0; i < bubbleCount; i++) {
+      bubbles.push(new Bubble(i));
+    }
+    
+    // Animation loop
+    function animate() {
+      // Update bubble positions
+      bubbles.forEach(bubble => bubble.update());
+      
+      // Remove old connection lines
+      const oldLines = container.querySelectorAll('.connection-line');
+      oldLines.forEach(line => line.remove());
+      
+      // Check for collisions and draw connections
+      for (let i = 0; i < bubbles.length; i++) {
+        for (let j = i + 1; j < bubbles.length; j++) {
+          const b1 = bubbles[i];
+          const b2 = bubbles[j];
+          const c1 = b1.getCenter();
+          const c2 = b2.getCenter();
+          
+          const dx = c2.x - c1.x;
+          const dy = c2.y - c1.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const minDistance = (b1.size + b2.size) / 2;
+          
+          // If bubbles are close enough, draw connection
+          if (distance < minDistance + 150) {
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            
+            const angle = Math.atan2(dy, dx);
+            const length = distance;
+            
+            line.style.width = length + 'px';
+            line.style.left = c1.x + 'px';
+            line.style.top = c1.y + 'px';
+            line.style.transform = `rotate(${angle}rad)`;
+            
+            // Stronger connection when closer
+            const opacity = Math.max(0, 1 - (distance / (minDistance + 150)));
+            line.style.opacity = opacity * 0.8;
+            
+            container.appendChild(line);
+            
+            // Collision response - bubbles bounce off each other
+            if (distance < minDistance + 5) {
+              // Calculate overlap
+              const overlap = (minDistance + 5) - distance;
+              
+              // Normalize direction vector
+              const normX = dx / distance;
+              const normY = dy / distance;
+              
+              // Separate bubbles
+              const separationX = normX * overlap * 0.5;
+              const separationY = normY * overlap * 0.5;
+              
+              b1.x -= separationX;
+              b1.y -= separationY;
+              b2.x += separationX;
+              b2.y += separationY;
+              
+              // Calculate relative velocity
+              const relVelX = b2.vx - b1.vx;
+              const relVelY = b2.vy - b1.vy;
+              
+              // Calculate relative velocity in collision normal direction
+              const velAlongNormal = relVelX * normX + relVelY * normY;
+              
+              // Only bounce if moving towards each other
+              if (velAlongNormal < 0) {
+                const restitution = 0.8; // Bounciness
+                
+                // Calculate impulse
+                const impulse = -(1 + restitution) * velAlongNormal;
+                
+                // Apply impulse to velocities
+                b1.vx -= impulse * normX * 0.5;
+                b1.vy -= impulse * normY * 0.5;
+                b2.vx += impulse * normX * 0.5;
+                b2.vy += impulse * normY * 0.5;
+                
+                // Add visual feedback - make bubbles pulse
+                b1.element.style.transform = 'scale(1.1)';
+                b2.element.style.transform = 'scale(1.1)';
+                
+                setTimeout(() => {
+                  b1.element.style.transform = 'scale(1)';
+                  b2.element.style.transform = 'scale(1)';
+                }, 200);
+              }
+            }
+          }
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      bubbles.forEach(bubble => {
+        bubble.x = Math.min(bubble.x, window.innerWidth - bubble.size);
+        bubble.y = Math.min(bubble.y, window.innerHeight - bubble.size);
+      });
+    });
+  </script>
+</body>
+</html>
